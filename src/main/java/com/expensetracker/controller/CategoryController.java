@@ -1,6 +1,7 @@
 package com.expensetracker.controller;
 
 import com.expensetracker.dto.CategoryDTO;
+import com.expensetracker.model.Category;
 import com.expensetracker.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,5 +35,16 @@ public class CategoryController {
     public ResponseEntity<CategoryDTO> addCategory(@Valid @RequestBody CategoryDTO category) {
         CategoryDTO created = categoryService.createCategory(category);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public boolean deleteCategory(@PathVariable Long id){
+        return categoryService.deleteCategory(id);
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryDTO category){
+      CategoryDTO updatedCategory =categoryService.updateCategory(id,category);
+        return new ResponseEntity<>(updatedCategory, HttpStatus.CREATED);
     }
 }

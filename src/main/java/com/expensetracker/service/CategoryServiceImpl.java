@@ -33,6 +33,35 @@ public class CategoryServiceImpl implements  CategoryService {
     }
 
     @Override
+    public boolean deleteCategory(Long id) {
+        try{
+            categoryRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public CategoryDTO updateCategory(Long id,CategoryDTO category) {
+        Category category1 = categoryRepository.findById(id).get();
+        
+        if(!category.getName().equalsIgnoreCase(category1.getName())){
+            category1.setName(category.getName());
+        }
+        if(!category.getType().equalsIgnoreCase(category1.getType())){
+            category1.setType(category.getType());
+        }
+
+        if(category.getBudget()!=(category1.getBudget())){
+            category1.setBudget(category.getBudget());
+        }
+        Category updatedCategory = categoryRepository.save(category1);
+        return convertToDTO(updatedCategory);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<CategoryDTO> getAllCategories() {
         return categoryRepository.findAll().stream()
