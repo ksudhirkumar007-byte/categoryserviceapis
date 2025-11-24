@@ -1,13 +1,18 @@
 package com.expensetracker.service;
 
 import com.expensetracker.dto.CategoryDTO;
+import com.expensetracker.dto.MonthSummaryDTO;
 import com.expensetracker.model.Category;
+import com.expensetracker.model.MonthSummary;
 import com.expensetracker.repository.CategoryRepository;
+import com.expensetracker.repository.MonthSummaryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +23,9 @@ public class CategoryServiceImpl implements  CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private MonthSummaryRepository monthSummaryRepository;
 
     @Override
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
@@ -62,10 +70,34 @@ public class CategoryServiceImpl implements  CategoryService {
     }
 
     @Override
+    public void summariseMonthAndUpdateCurrentMonth(String month) {
+        List<Category> allCategories = categoryRepository.findAll();
+        for(Category category:allCategories){
+            MonthSummaryDTO monthSummaryDTO = new MonthSummaryDTO();
+            monthSummaryDTO.setCategoryName(category.getName());
+            monthSummaryDTO.setType(category.getType());
+            monthSummaryDTO.setBudget(category.getBudget());
+            monthSummaryDTO.setTotalSpent(category.getTotalSpent());
+            monthSummaryDTO.setMonth(month);
+            MonthSummary monthSummary = convertToSummaryEntity(monthSummaryDTO);
+            monthSummaryRepository.save(monthSummary);
+        }
+        categoryRepository.resetTotalsAndSetNewMonth(getNextMonth(month));
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<CategoryDTO> getAllCategories() {
         return categoryRepository.findAll().stream()
                 .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<MonthSummaryDTO> getAllMonthSummaries() {
+        return monthSummaryRepository.findAll().stream()
+                .map(this::convertToSummaryDTO)
                 .collect(Collectors.toList());
     }
 
@@ -86,5 +118,37 @@ public class CategoryServiceImpl implements  CategoryService {
                 .budget(dto.getBudget())
                 .type(dto.getType())
                 .build();
+    }
+
+    private MonthSummaryDTO convertToSummaryDTO(MonthSummary summary) {
+        return MonthSummaryDTO.builder()
+                .id(summary.getId())
+                .categoryName(summary.getCategoryName())
+                .budget(summary.getBudget())
+                .type(summary.getType())
+                .totalSpent(summary.getTotalSpent())
+                .build();
+    }
+
+    private MonthSummary convertToSummaryEntity(MonthSummaryDTO dto) {
+        return MonthSummary.builder()
+                .categoryName(dto.getCategoryName())
+                .budget(dto.getBudget())
+                .type(dto.getType())
+                .totalSpent(dto.getTotalSpent())
+                .build();
+    }
+    public static String getNextMonth(String input) {
+        // Define the input and output formats
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM-yy");
+
+        // Parse the input date (assumes day = 1)
+        LocalDate date = LocalDate.parse(input, formatter).withDayOfMonth(1);
+
+        // Add 1 month
+        LocalDate nextMonth = date.plusMonths(1);
+
+        // Return in same format
+        return nextMonth.format(formatter);
     }
 }

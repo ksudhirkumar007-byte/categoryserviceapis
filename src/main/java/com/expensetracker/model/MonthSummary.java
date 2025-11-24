@@ -12,19 +12,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Category {
+public class MonthSummary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String name;
+    private String categoryName;
 
+    @Column(nullable = false)
     private Double budget;
 
     @Column(nullable = false)
     private String type;
 
+
     private Double totalSpent;
+    @Column(nullable = false)
+    private String month;
+
     // Getters and Setters
 }

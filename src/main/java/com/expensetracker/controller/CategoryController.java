@@ -47,4 +47,15 @@ public class CategoryController {
       CategoryDTO updatedCategory =categoryService.updateCategory(id,category);
         return new ResponseEntity<>(updatedCategory, HttpStatus.CREATED);
     }
+
+    @PostMapping("/summarise-categories")
+    public boolean summariseMonthAndUpdateCategories(@Valid @RequestBody String month){
+        try{
+            categoryService.summariseMonthAndUpdateCurrentMonth(month);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
