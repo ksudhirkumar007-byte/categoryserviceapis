@@ -26,5 +26,7 @@ public class Category {
     private String type;
 
     private Double totalSpent;
+
+    private String currentMonth;
     // Getters and Setters
 }

@@ -24,4 +24,6 @@ public class CategoryDTO {
 
     private Double totalSpent;
 
+    private String currentMonth;
+
 }
