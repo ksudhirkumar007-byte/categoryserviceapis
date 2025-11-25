@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/categories")
-@CrossOrigin(origins = "https://expensetrackerupdatedui.onrender.com/")
+@CrossOrigin(origins = "https://expensetrackerupdatedui.onrender.com")
 public class CategoryController {
 
     private final CategoryService categoryService;
