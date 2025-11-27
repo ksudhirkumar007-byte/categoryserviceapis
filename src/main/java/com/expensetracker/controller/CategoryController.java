@@ -19,6 +19,11 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
+    @GetMapping("/keepalive")
+    public String ping() {
+        return "alive";
+    }
+
     @GetMapping
     public List<CategoryDTO> getAllCategories() {
         List<CategoryDTO> allCategories = categoryService.getAllCategories();
