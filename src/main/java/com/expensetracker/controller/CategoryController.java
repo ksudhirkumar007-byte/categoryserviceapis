@@ -21,6 +21,7 @@ public class CategoryController {
 
     @GetMapping("/keepalive")
     public String ping() {
+        System.out.println("keeping services alive");
         return "alive";
     }
 
