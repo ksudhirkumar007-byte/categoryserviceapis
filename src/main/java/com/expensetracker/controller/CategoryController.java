@@ -19,7 +19,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("/keepalive")
+    @GetMapping("/health")
     public String ping() {
         System.out.println("keeping services alive");
         return "alive";
