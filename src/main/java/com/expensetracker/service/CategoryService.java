@@ -16,4 +16,6 @@ public interface CategoryService {
     CategoryDTO updateCategory(Long id,CategoryDTO category);
 
     void summariseMonthAndUpdateCurrentMonth(@Valid String month);
+    List<MonthSummaryDTO> summarisedCategoriesPerMonth(@Valid String month);
+
 }

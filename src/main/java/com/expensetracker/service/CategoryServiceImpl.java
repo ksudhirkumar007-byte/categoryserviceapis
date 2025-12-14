@@ -86,6 +86,13 @@ public class CategoryServiceImpl implements  CategoryService {
     }
 
     @Override
+    public List<MonthSummaryDTO> summarisedCategoriesPerMonth(String month) {
+        List<MonthSummaryDTO> byMonth = monthSummaryRepository.findByMonth(month).stream().map(this::convertToSummaryDTO).collect(Collectors.toList());
+
+        return byMonth;
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<CategoryDTO> getAllCategories() {
         return categoryRepository.findAll().stream()
