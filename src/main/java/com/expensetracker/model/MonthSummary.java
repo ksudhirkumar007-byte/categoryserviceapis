@@ -28,6 +28,7 @@ public class MonthSummary {
 
 
     private Double totalSpent;
+
     @Column(nullable = false)
     private String month;
 

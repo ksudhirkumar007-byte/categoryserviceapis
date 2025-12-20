@@ -140,6 +140,7 @@ public class CategoryServiceImpl implements  CategoryService {
                 .budget(summary.getBudget())
                 .type(summary.getType())
                 .totalSpent(summary.getTotalSpent())
+                .month(summary.getMonth())
                 .build();
     }
 
