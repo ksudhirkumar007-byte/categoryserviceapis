@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface MonthSummaryRepository extends JpaRepository<MonthSummary,Long> {
    List<MonthSummary> findByMonth(String month);
+
+    List<MonthSummary> findByCategoryName(String category);
 }

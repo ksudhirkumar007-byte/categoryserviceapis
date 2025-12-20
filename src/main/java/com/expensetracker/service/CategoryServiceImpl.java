@@ -88,8 +88,14 @@ public class CategoryServiceImpl implements  CategoryService {
     @Override
     public List<MonthSummaryDTO> summarisedCategoriesPerMonth(String month) {
         List<MonthSummaryDTO> byMonth = monthSummaryRepository.findByMonth(month).stream().map(this::convertToSummaryDTO).collect(Collectors.toList());
-
+        System.out.println("month summaries list "+byMonth.size());
         return byMonth;
+    }
+
+    @Override
+    public List<MonthSummaryDTO> summarisedCategoriesPerCategory(String category) {
+        List<MonthSummaryDTO> byCategory = monthSummaryRepository.findByCategoryName(category).stream().map(this::convertToSummaryDTO).collect(Collectors.toList());
+        return byCategory;
     }
 
     @Override

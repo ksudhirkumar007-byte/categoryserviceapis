@@ -67,10 +67,21 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/summarisedcategories/{month}")
+
+
+    @GetMapping("/summarisedcategories/month/{month}")
     public List<MonthSummaryDTO> summarisedCategoriesPerMonth(@PathVariable String month){
         try{
           return categoryService.summarisedCategoriesPerMonth(month);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<MonthSummaryDTO>();
+        }
+    }
+    @GetMapping("/summarisedcategories/category/{category}")
+    public List<MonthSummaryDTO> summarisedCategoriesPerCategory(@PathVariable String category){
+        try{
+            return categoryService.summarisedCategoriesPerCategory(category);
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<MonthSummaryDTO>();
