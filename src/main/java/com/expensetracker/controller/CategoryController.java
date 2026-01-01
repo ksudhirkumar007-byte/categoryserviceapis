@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/categories")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://xpenss.in","http://localhost:3000"})
 public class CategoryController {
 
     private final CategoryService categoryService;
