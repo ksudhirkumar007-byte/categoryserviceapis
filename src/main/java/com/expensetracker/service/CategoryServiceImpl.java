@@ -1,6 +1,8 @@
 package com.expensetracker.service;
 
+import com.expensetracker.client.ExpenseClient;
 import com.expensetracker.dto.CategoryDTO;
+import com.expensetracker.dto.ExpenseDTO;
 import com.expensetracker.dto.MonthSummaryDTO;
 import com.expensetracker.model.Category;
 import com.expensetracker.model.MonthSummary;
@@ -26,6 +28,8 @@ public class CategoryServiceImpl implements  CategoryService {
 
     @Autowired
     private MonthSummaryRepository monthSummaryRepository;
+
+    private ExpenseClient expenseClient;
 
     @Override
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
@@ -72,11 +76,14 @@ public class CategoryServiceImpl implements  CategoryService {
     @Override
     public void summariseMonthAndUpdateCurrentMonth(String month) {
         List<Category> allCategories = categoryRepository.findAll();
+        List<ExpenseDTO> expensesOfPrevMonth = expenseClient.getAllExpenses(month);
         for(Category category:allCategories){
             MonthSummaryDTO monthSummaryDTO = new MonthSummaryDTO();
             monthSummaryDTO.setCategoryName(category.getName());
             monthSummaryDTO.setType(category.getType());
             monthSummaryDTO.setBudget(category.getBudget());
+            double totalSpent = expensesOfPrevMonth.stream().filter(e -> e.getCategory_id() == category.getId()).mapToDouble(ExpenseDTO::getAmount).sum();
+            System.out.println(totalSpent+" amount spent for "+category.getName());
             monthSummaryDTO.setTotalSpent(category.getTotalSpent());
             monthSummaryDTO.setMonth(month);
             MonthSummary monthSummary = convertToSummaryEntity(monthSummaryDTO);
