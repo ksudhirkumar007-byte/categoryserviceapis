@@ -1,0 +1,11 @@
+package com.expensetracker.repository;
+
+import com.expensetracker.model.MonthSummary;
+import com.expensetracker.model.Users;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface UserRepository extends JpaRepository<Users,Long> {
+    List<Users> findByEmail(String email);
+}
