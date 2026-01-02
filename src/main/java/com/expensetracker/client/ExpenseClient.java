@@ -13,7 +13,7 @@ import java.util.List;
 public interface ExpenseClient {
 
     @GetMapping("/api/expenses/month/{month}")
-    List<ExpenseDTO> getAllExpenses(@PathVariable("month") String month);
+    List<ExpenseDTO> getAllExpensesOfThisMonth(@PathVariable("month") String month);
 
     @GetMapping("/api/expenses")
     List<ExpenseDTO> getAllExpenses();

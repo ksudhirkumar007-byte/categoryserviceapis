@@ -23,13 +23,11 @@ import java.util.stream.Collectors;
 @Transactional
 public class CategoryServiceImpl implements  CategoryService {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
-    @Autowired
-    private MonthSummaryRepository monthSummaryRepository;
+    private final MonthSummaryRepository monthSummaryRepository;
 
-    private ExpenseClient expenseClient;
+    private final ExpenseClient expenseClient;
 
     @Override
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
@@ -76,7 +74,7 @@ public class CategoryServiceImpl implements  CategoryService {
     @Override
     public void summariseMonthAndUpdateCurrentMonth(String month) {
         List<Category> allCategories = categoryRepository.findAll();
-        List<ExpenseDTO> expensesOfPrevMonth = expenseClient.getAllExpenses(month);
+        List<ExpenseDTO> expensesOfPrevMonth = expenseClient.getAllExpensesOfThisMonth(month);
         for(Category category:allCategories){
             MonthSummaryDTO monthSummaryDTO = new MonthSummaryDTO();
             monthSummaryDTO.setCategoryName(category.getName());
