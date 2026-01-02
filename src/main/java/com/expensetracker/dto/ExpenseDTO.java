@@ -18,7 +18,7 @@ public class ExpenseDTO {
     private Double amount;
 
     @NotNull(message = "Category is required")
-    private long category_id;
+    private Long category_id;
 
     @NotBlank(message = "Description is required")
     private String description;

@@ -75,19 +75,21 @@ public class CategoryServiceImpl implements  CategoryService {
     public void summariseMonthAndUpdateCurrentMonth(String month) {
         List<Category> allCategories = categoryRepository.findAll();
         List<ExpenseDTO> expensesOfPrevMonth = expenseClient.getAllExpensesOfThisMonth(month);
+        System.out.println("expenses of prev month are "+expensesOfPrevMonth.size());
         for(Category category:allCategories){
+            System.out.println("category Id is "+category.getId());
             MonthSummaryDTO monthSummaryDTO = new MonthSummaryDTO();
             monthSummaryDTO.setCategoryName(category.getName());
             monthSummaryDTO.setType(category.getType());
             monthSummaryDTO.setBudget(category.getBudget());
-            double totalSpent = expensesOfPrevMonth.stream().filter(e -> e.getCategory_id() == category.getId()).mapToDouble(ExpenseDTO::getAmount).sum();
+            double totalSpent = expensesOfPrevMonth.stream().filter(e -> e.getCategory_id().equals(category.getId())).mapToDouble(ExpenseDTO::getAmount).sum();
             System.out.println(totalSpent+" amount spent for "+category.getName());
             monthSummaryDTO.setTotalSpent(category.getTotalSpent());
             monthSummaryDTO.setMonth(month);
             MonthSummary monthSummary = convertToSummaryEntity(monthSummaryDTO);
             monthSummaryRepository.save(monthSummary);
         }
-        categoryRepository.resetTotalsAndSetNewMonth(getNextMonth(month));
+       // categoryRepository.resetTotalsAndSetNewMonth(getNextMonth(month));
     }
 
     @Override
@@ -159,7 +161,7 @@ public class CategoryServiceImpl implements  CategoryService {
     }
     public static String getNextMonth(String input) {
         // Define the input and output formats
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM-yy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM yy");
 
         // Parse the input date (assumes day = 1)
         LocalDate date = LocalDate.parse(input, formatter).withDayOfMonth(1);
