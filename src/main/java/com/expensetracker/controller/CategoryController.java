@@ -27,7 +27,7 @@ public class CategoryController {
         return "alive";
     }
 
-    @GetMapping
+    @GetMapping("/")
     public List<CategoryDTO> getAllCategories() {
         List<CategoryDTO> allCategories = categoryService.getAllCategories();
         allCategories.forEach(i-> System.out.println(i.getName()));
