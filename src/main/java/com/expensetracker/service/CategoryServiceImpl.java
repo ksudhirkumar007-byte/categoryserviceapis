@@ -87,6 +87,7 @@ public class CategoryServiceImpl implements  CategoryService {
             monthSummaryDTO.setTotalSpent(category.getTotalSpent());
             monthSummaryDTO.setMonth(month);
             MonthSummary monthSummary = convertToSummaryEntity(monthSummaryDTO);
+            System.out.println("month summary totalSpent is "+monthSummary.getTotalSpent());
             monthSummaryRepository.save(monthSummary);
         }
        // categoryRepository.resetTotalsAndSetNewMonth(getNextMonth(month));
