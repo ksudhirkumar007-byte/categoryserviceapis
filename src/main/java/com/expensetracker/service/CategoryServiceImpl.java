@@ -75,7 +75,7 @@ public class CategoryServiceImpl implements  CategoryService {
     public void summariseMonthAndUpdateCurrentMonth(String month) {
         List<Category> allCategories = categoryRepository.findAll();
         List<ExpenseDTO> expensesOfPrevMonth = expenseClient.getAllExpensesOfThisMonth(month);
-        System.out.println("expenses of prev month are "+expensesOfPrevMonth.size());
+        System.out.println("expenses of prev month "+month+" are "+expensesOfPrevMonth.size());
         for(Category category:allCategories){
             System.out.println("category Id is "+category.getId());
             MonthSummaryDTO monthSummaryDTO = new MonthSummaryDTO();
@@ -84,7 +84,8 @@ public class CategoryServiceImpl implements  CategoryService {
             monthSummaryDTO.setBudget(category.getBudget());
             double totalSpent = expensesOfPrevMonth.stream().filter(e -> e.getCategory_id().equals(category.getId())).mapToDouble(ExpenseDTO::getAmount).sum();
             System.out.println(totalSpent+" amount spent for "+category.getName());
-            monthSummaryDTO.setTotalSpent(category.getTotalSpent());
+            monthSummaryDTO.setTotalSpent(totalSpent);
+            System.out.println("month is "+month);
             monthSummaryDTO.setMonth(month);
             MonthSummary monthSummary = convertToSummaryEntity(monthSummaryDTO);
             System.out.println("month summary totalSpent is "+monthSummary.getTotalSpent());
@@ -158,6 +159,7 @@ public class CategoryServiceImpl implements  CategoryService {
                 .budget(dto.getBudget())
                 .type(dto.getType())
                 .totalSpent(dto.getTotalSpent())
+                .month(dto.getMonth())
                 .build();
     }
     public static String getNextMonth(String input) {
