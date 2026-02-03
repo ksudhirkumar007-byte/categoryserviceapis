@@ -39,14 +39,23 @@ public class UserServiceImpl implements UserService {
     private RefreshTokenRepository refreshTokenRepository;
 
     @Override
-    public boolean registerUser(String email, String password) {
+    public LoginResponse registerUser(String email, String password) {
 
         UserDTO userDTO = new UserDTO();
         userDTO.setEmail(email);
         userDTO.setPasswordHash(password);
         Users user = convertToEntity(userDTO);
         userRepository.save(user);
-        return false;
+        String accessToken = generateAccessToken(userDTO);
+        System.out.println("accessToken is "+accessToken);
+        String refreshToken = generateRefreshToken();
+        RefreshTokens refreshTokens = new RefreshTokens();
+        refreshTokens.setRevoked(false);
+        refreshTokens.setUserId(user.getId());
+        refreshTokens.setExpiresAt(Instant.now().plus(30, ChronoUnit.DAYS));
+        refreshTokens.setToken(refreshToken);
+        refreshTokenRepository.save(refreshTokens);
+        return new LoginResponse(accessToken,refreshToken);
     }
     @Override
     public LoginResponse checkLoginStatus(String email,String password){

@@ -21,11 +21,11 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public boolean registerUser(@Valid @RequestBody UserDTO user){
+    public LoginResponse registerUser(@Valid @RequestBody UserDTO user){
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         String hashPassword = encoder.encode(user.getPasswordHash());
-        boolean status = userService.registerUser(user.getEmail(), hashPassword);
-        return status;
+        LoginResponse loginResponse = userService.registerUser(user.getEmail(), hashPassword);
+        return loginResponse;
     }
 
     @PostMapping("/login")
